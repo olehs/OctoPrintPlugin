@@ -574,7 +574,9 @@ class OctoPrintOutputDevice(NetworkedPrinterOutputDevice):
                     print_time = json_data["progress"]["printTime"]
                     if print_time:
                         print_job.updateTimeElapsed(print_time)
-                        if json_data["progress"]["completion"]: # not 0 or None or ""
+                        if json_data["progress"]["printTimeLeft"]:
+                            print_job.updateTimeTotal(print_time + json_data["progress"]["printTimeLeft"])
+                        elif json_data["progress"]["completion"]: # not 0 or None or ""
                             print_job.updateTimeTotal(print_time / (json_data["progress"]["completion"] / 100))
                         else:
                             print_job.updateTimeTotal(0)
